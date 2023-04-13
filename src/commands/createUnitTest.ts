@@ -42,11 +42,11 @@ export async function createUnitTest(context: vscode.ExtensionContext) {
       let outputUnitTestUri: vscode.Uri;
 
       switch (fileType) {
-        case 'go':
-          outputUnitTestUri = vscode.Uri.file(path.join(sourceDir, `${sourceRawFileName}_test.go`));
-          break;
-        default:
-          break;
+      case 'go':
+        outputUnitTestUri = vscode.Uri.file(path.join(sourceDir, `${sourceRawFileName}_test.go`));
+        break;
+      default:
+        break;
       }
 
       const existed = await exists(outputUnitTestUri);

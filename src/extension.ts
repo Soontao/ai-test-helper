@@ -9,24 +9,24 @@ import { setBaseUrl } from './commands/setBaseUrl';
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	context.subscriptions.push(
-		vscode.commands.registerCommand(
-			'TheoSun-ai-test-helper.create-unit-test',
-			() => createUnitTest(context)
-		),
-		vscode.commands.registerCommand(
-			'TheoSun-ai-test-helper.set-api-key',
-			() => setApiKey(context)
-		),
-		vscode.commands.registerCommand(
-			'TheoSun-ai-test-helper.set-base-url',
-			() => setBaseUrl(context)
-		),
-		vscode.commands.registerCommand(
-			'TheoSun-ai-test-helper.create-unit-test-for-symbol',
-			() => createUnitTestForSymbol(context)
-		),
-	);
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      'TheoSun-ai-test-helper.create-unit-test',
+      () => createUnitTest(context)
+    ),
+    vscode.commands.registerCommand(
+      'TheoSun-ai-test-helper.set-api-key',
+      () => setApiKey(context)
+    ),
+    vscode.commands.registerCommand(
+      'TheoSun-ai-test-helper.set-base-url',
+      () => setBaseUrl(context)
+    ),
+    vscode.commands.registerCommand(
+      'TheoSun-ai-test-helper.create-unit-test-for-symbol',
+      () => createUnitTestForSymbol(context)
+    ),
+  );
 }
 
 // This method is called when your extension is deactivated
