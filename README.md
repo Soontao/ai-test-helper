@@ -20,3 +20,5 @@
   - [ ] Chunk Large File
 - [ ] Fix Existed Unit Test
 - [ ] Improve Code Coverage
+- [ ] Multi Selection
+- [ ] Token Calculation
