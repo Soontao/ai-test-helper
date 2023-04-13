@@ -3,26 +3,40 @@ import { Configuration, CreateChatCompletionRequest, OpenAIApi } from "openai";
 import { inspect } from "util";
 import * as vscode from "vscode";
 import path = require("path");
+import { KEY_API_KEY, KEY_BASE_URL, } from '../constants';
 
 
 export async function getSymbolList(uri?: vscode.Uri): Promise<Array<vscode.SymbolInformation>> {
   // Get the symbols in the current file
-  return vscode.commands.executeCommand('vscode.executeDocumentSymbolProvider', uri ?? vscode.window.activeTextEditor.document.uri);
+  return vscode.commands.executeCommand(
+    'vscode.executeDocumentSymbolProvider',
+    uri ?? vscode.window.activeTextEditor.document.uri
+  );
 }
 
 export function getModel() {
   return vscode.workspace.getConfiguration("theosun.ai.unit.test.helper").get("model") as string;
 }
-export async function validConfiguration() {
-  // TODO: more validation
-  const { apiKey, baseUrl } = vscode.workspace.getConfiguration("theosun.ai.unit.test.helper");
 
-  if (apiKey === "") {
+
+async function getAIConfig(context: vscode.ExtensionContext) {
+  const apiKey = await context.secrets.get(KEY_API_KEY);
+  let baseUrl = await context.secrets.get(KEY_BASE_URL);
+  if (baseUrl === undefined || baseUrl === '') {
+    baseUrl = 'https://api.openai.com/v1';
+  }
+  return { apiKey, baseUrl };
+}
+
+export async function validConfiguration(context: vscode.ExtensionContext) {
+  const { apiKey, baseUrl } = await getAIConfig(context);
+
+  if (apiKey === undefined || apiKey === "") {
     await vscode.window.showErrorMessage("apiKey must be maintained");
     return false;
   }
 
-  if (baseUrl === "") {
+  if (baseUrl === undefined || baseUrl === "") {
     await vscode.window.showErrorMessage("baseUrl must be maintained");
     return false;
   }
@@ -30,16 +44,19 @@ export async function validConfiguration() {
   return true;
 }
 
-export async function getOpenAI(): Promise<OpenAIApi | undefined> {
-  if (await validConfiguration()) {
-    const { apiKey, baseUrl } = vscode.workspace.getConfiguration("theosun.ai.unit.test.helper");
+export async function getOpenAI(context: vscode.ExtensionContext): Promise<OpenAIApi | undefined> {
+  if (await validConfiguration(context)) {
+    const { apiKey, baseUrl } = await getAIConfig(context);
     return new OpenAIApi(new Configuration({ apiKey, basePath: baseUrl }));
   }
 }
 
-export async function aiResponse(request: Pick<CreateChatCompletionRequest, 'messages'>): Promise<string | undefined> {
+export async function aiResponse(
+  request: Pick<CreateChatCompletionRequest, 'messages'>,
+  context: vscode.ExtensionContext
+): Promise<string | undefined> {
   try {
-    const api = await getOpenAI();
+    const api = await getOpenAI(context);
     const { model } = vscode.workspace.getConfiguration("theosun.ai.unit.test.helper");
     const response = await api.createChatCompletion({ model, ...request, temperature: 0 });
     return response.data.choices[0].message.content;

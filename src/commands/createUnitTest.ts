@@ -3,8 +3,8 @@ import { aiResponse, currentFileInformation, exists, firstCodeBlock, validConfig
 import path = require('path');
 import { SYSTEM_MSG_EXPERT_DEVELOPER } from '../prompts/coding';
 
-export async function createUnitTest() {
-  if (!await validConfiguration()) { return; }
+export async function createUnitTest(context: vscode.ExtensionContext) {
+  if (!await validConfiguration(context)) { return; }
 
   const editor = vscode.window.activeTextEditor;
   if (!editor) { return; }
@@ -19,18 +19,21 @@ export async function createUnitTest() {
     },
     async () => {
 
-      const response = await aiResponse({
-        messages: [
-          {
-            role: "system",
-            content: SYSTEM_MSG_EXPERT_DEVELOPER
-          },
-          {
-            role: "user",
-            content: `Please help to create unit test for following ${fileType} code:\n${mdCodeContent}`
-          }
-        ]
-      });
+      const response = await aiResponse(
+        {
+          messages: [
+            {
+              role: "system",
+              content: SYSTEM_MSG_EXPERT_DEVELOPER
+            },
+            {
+              role: "user",
+              content: `Please help to create unit test for following ${fileType} code:\n${mdCodeContent}`
+            }
+          ]
+        },
+        context
+      );
       if (!response) { return; }
 
       // extract first group of AI response

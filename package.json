@@ -12,8 +12,19 @@
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
+  "permissions": [
+    "secrets"
+  ],
   "contributes": {
     "commands": [
+      {
+        "command": "TheoSun-ai-test-helper.set-api-key",
+        "title": "AI: Set API Key"
+      },
+      {
+        "command": "TheoSun-ai-test-helper.set-base-url",
+        "title": "AI: Set API Base Url"
+      },
       {
         "command": "TheoSun-ai-test-helper.create-unit-test",
         "title": "AI: Create Unit Test",
@@ -28,10 +39,6 @@
     "configuration": {
       "title": "AI Unit Test Helper Configuration",
       "properties": {
-        "theosun.ai.unit.test.helper.apiKey": {
-          "type": "string",
-          "description": "OpenAI ApiKey"
-        },
         "theosun.ai.unit.test.helper.model": {
           "type": "string",
           "default": "gpt-3.5-turbo-0301",
@@ -44,11 +51,6 @@
             "gpt-3.5-turbo-0301"
           ],
           "description": "OpenAI Model Name"
-        },
-        "theosun.ai.unit.test.helper.baseUrl": {
-          "type": "string",
-          "default": "https://api.openai.com/v1",
-          "description": "OpenAI API Base URL"
         }
       }
     }

@@ -4,8 +4,8 @@ import { SYSTEM_MSG_EXPERT_DEVELOPER } from '../prompts/coding';
 import { aiResponse, currentFileInformation, firstCodeBlock, getSymbolList, validConfiguration } from "./utils";
 
 
-export async function createUnitTestForSymbol() {
-  if (!await validConfiguration()) { return; }
+export async function createUnitTestForSymbol(context: vscode.ExtensionContext) {
+  if (!await validConfiguration(context)) { return; }
 
   const symbols = await getSymbolList();
   const sym = await vscode.window.showQuickPick(
@@ -24,29 +24,34 @@ export async function createUnitTestForSymbol() {
     },
     async () => {
 
-      const response = await aiResponse({
-        messages: [
-          {
-            role: "system",
-            content: SYSTEM_MSG_EXPERT_DEVELOPER
-          },
-          {
-            role: "user",
-            content: `Please help to create unit test for '${sym.label}' in following ${fileType} code:\n${mdCodeContent}`
-          }
-        ]
-      });
+      const response = await aiResponse(
+        {
+          messages: [
+            {
+              role: "system",
+              content: SYSTEM_MSG_EXPERT_DEVELOPER
+            },
+            {
+              role: "user",
+              content: `Please help to create unit test for '${sym.label}' in following ${fileType} code:\n${mdCodeContent}`
+            }
+          ]
+        },
+        context
+      );
       if (!response) { return; }
 
       // extract first group of AI response
       const unitTestContent = firstCodeBlock(response);
 
-      await vscode.window.showInformationMessage("please review the generated unit test and copy to correct location");
-      
       // Show the text document in the right-hand editor pane
       await vscode.window.showTextDocument(
         await vscode.workspace.openTextDocument({ content: unitTestContent, language: fileType }),
         { viewColumn: vscode.ViewColumn.Two }
+      );
+
+      await vscode.window.showInformationMessage(
+        "please review the generated unit test and copy to correct location"
       );
 
     });
