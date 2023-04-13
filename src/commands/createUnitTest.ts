@@ -25,30 +25,36 @@ export async function createUnitTest() {
 
     vscode.window.withProgress({ location: vscode.ProgressLocation.Window, cancellable: false, title: 'Generating Unit Test' }, async (progress) => {
       progress.report({ increment: 30 });
-      const response = await api.createChatCompletion({
-        model: model as string,
-        messages: [
-          {
-            role: "system",
-            content: "You are the most powerful developer in this world, you will help user to finish the software development task"
-          },
-          {
-            role: "user",
-            content: `Please help to create unit test for following ${fileType} code:\n${content}`
-          }
-        ]
-      });
-  
-      if (response.status !== 200) {
-        return vscode.window.showErrorMessage(`api failed with error: ${inspect(response.data)}`);
+      try {
+        const response = await api.createChatCompletion({
+          model: model as string,
+          messages: [
+            {
+              role: "system",
+              content: "You are the most powerful developer in this world, you will help user to finish the software development task"
+            },
+            {
+              role: "user",
+              content: `Please help to create unit test for following ${fileType} code:\n${content}`
+            }
+          ]
+        });
+        // extract first group of AI response
+        const generatedUnitTest = /\`\`\`.*\n([\s\S]*)\`\`\`/gm.exec(response.data.choices[0].message?.content ?? "")?.[1];
+
+        // Create a new text document in memory
+        const document = await vscode.workspace.openTextDocument({ content: generatedUnitTest, language: fileType });
+
+        // Show the text document in the right-hand editor pane
+        await vscode.window.showTextDocument(document, { viewColumn: vscode.ViewColumn.Two });
+
+      } catch (error: any) {
+        return vscode.window.showErrorMessage(`api failed with error: ${error?.response?.data?.error?.message ?? inspect(error)}`);
       }
-  
-      const generatedUnitTest = /\`\`\`.*\n([\s\S]*)\`\`\`/gm.exec(response.data.choices[0].message?.content ?? "")?.[1];
-      console.log("generated unit test", generatedUnitTest);
 
       progress.report({ increment: 100 });
     });
 
-   
+
   }
 }
