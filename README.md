@@ -14,7 +14,9 @@
 
 ## Features
 
-- [ ] Create Unit Test
-  - [ ] chunk large file
+- [x] Create Unit Test
+  - [x] Create Unit Test For File
+  - [x] Create Unit For Symbol
+  - [ ] Chunk Large File
 - [ ] Fix Existed Unit Test
 - [ ] Improve Code Coverage

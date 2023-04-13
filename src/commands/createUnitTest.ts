@@ -1,8 +1,7 @@
 import * as vscode from 'vscode';
 import { aiResponse, currentFileInformation, exists, firstCodeBlock, validConfiguration } from './utils';
 import path = require('path');
-
-const SYSTEM_MSG = `You are the most powerful developer in this world, you will help user to finish the software development task, you must use markdown format to output, you only need to output the final code example`;
+import { SYSTEM_MSG_EXPERT_DEVELOPER } from '../prompts/coding';
 
 export async function createUnitTest() {
   if (!await validConfiguration()) { return; }
@@ -18,14 +17,13 @@ export async function createUnitTest() {
       cancellable: false,
       title: 'Generating Unit Test'
     },
-    async (progress) => {
-      progress.report({ increment: 30 });
+    async () => {
 
       const response = await aiResponse({
         messages: [
           {
             role: "system",
-            content: SYSTEM_MSG
+            content: SYSTEM_MSG_EXPERT_DEVELOPER
           },
           {
             role: "user",
@@ -75,7 +73,6 @@ export async function createUnitTest() {
         { viewColumn: vscode.ViewColumn.Two }
       );
 
-      progress.report({ increment: 100 });
     });
 
 
