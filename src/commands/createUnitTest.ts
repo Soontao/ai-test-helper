@@ -8,8 +8,8 @@ export async function createUnitTest() {
   if (apiKey === "") {
     return vscode.window.showErrorMessage("apiKey must be maintained");
   }
-  const configuration = new Configuration({ apiKey, basePath: baseUrl });
-  const api = new OpenAIApi(configuration);
+  
+  const api = new OpenAIApi(new Configuration({ apiKey, basePath: baseUrl }));
 
   // Get the active text editor
   const editor = vscode.window.activeTextEditor;
