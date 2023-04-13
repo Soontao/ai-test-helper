@@ -45,6 +45,12 @@ export async function createUnitTest(context: vscode.ExtensionContext) {
       case 'go':
         outputUnitTestUri = vscode.Uri.file(path.join(sourceDir, `${sourceRawFileName}_test.go`));
         break;
+      case 'javascript':
+        outputUnitTestUri = vscode.Uri.file(path.join(sourceDir, `${sourceRawFileName}.test.js`));
+        break;
+      case 'typescript':
+        outputUnitTestUri = vscode.Uri.file(path.join(sourceDir, `${sourceRawFileName}.test.ts`));
+        break;
       default:
         break;
       }

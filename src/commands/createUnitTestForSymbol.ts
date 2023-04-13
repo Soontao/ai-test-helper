@@ -14,6 +14,8 @@ export async function createUnitTestForSymbol(context: vscode.ExtensionContext) 
   );
   if (!sym) { return; }
 
+  const additionalPrompt = await vscode.window.showInputBox({ title: "any additional prompt for AI?" });
+
   const { fileType, mdCodeContent } = currentFileInformation();
 
   vscode.window.withProgress(
@@ -33,7 +35,7 @@ export async function createUnitTestForSymbol(context: vscode.ExtensionContext) 
             },
             {
               role: "user",
-              content: `Please help to create unit test for '${sym.label}' in following ${fileType} code:\n${mdCodeContent}`
+              content: `Please help to create unit test for '${sym.label}' in following ${fileType} code:\n${mdCodeContent}\n${additionalPrompt}`
             }
           ]
         },
