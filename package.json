@@ -7,16 +7,12 @@
     "vscode": "^1.75.0"
   },
   "categories": [
-    "Other"
+    "Testing"
   ],
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
-      {
-        "command": "TheoSun-ai-test-helper.helloWorld",
-        "title": "AI: Hello World"
-      },
       {
         "command": "TheoSun-ai-test-helper.create-unit-test",
         "title": "AI: Create Unit Test",
