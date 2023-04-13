@@ -2,6 +2,7 @@
   "name": "ai-test-helper",
   "displayName": "AI Test Helper",
   "description": "Build/Improve Unit Test By AI",
+  "publisher": "TheoSun",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.75.0"
