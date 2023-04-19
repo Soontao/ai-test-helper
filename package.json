@@ -78,5 +78,6 @@
   },
   "dependencies": {
     "openai": "^3.2.1"
-  }
+  },
+  "license": "MIT"
 }
