@@ -1,6 +1,6 @@
 # AI Test Helper
 
-> help you create unit test by AI
+> Help you create unit test by AI
 
 ## Language Support
 
@@ -22,6 +22,15 @@
 - [ ] Improve Code Coverage
 - [ ] Multi Selection
 - [ ] Token Calculation
+- [ ] AST Parser
+
+## Internal
+
+### How to build ast parser
+
+```bash
+antlr4 -Dlanguage=TypeScript GoLexer.g4 GoParser.g4
+```
 
 ## [CHANGELOG](./CHANGELOG.md)
 
