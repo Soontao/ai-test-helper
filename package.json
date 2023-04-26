@@ -34,6 +34,11 @@
         "command": "TheoSun-ai-test-helper.create-unit-test-for-symbol",
         "title": "AI: Create Unit Test For Symbol",
         "when": "editorTextFocus && !editorReadonly"
+      },
+      {
+        "command": "TheoSun-ai-test-helper.create-document",
+        "title": "AI: Create Document",
+        "when": "editorTextFocus && !editorReadonly"
       }
     ],
     "configuration": {
